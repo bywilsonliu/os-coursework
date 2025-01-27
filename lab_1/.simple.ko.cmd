@@ -1,0 +1,1 @@
+savedcmd_/home/wilson/Desktop/lab_1/simple.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/wilson/Desktop/lab_1/simple.ko /home/wilson/Desktop/lab_1/simple.o /home/wilson/Desktop/lab_1/simple.mod.o
