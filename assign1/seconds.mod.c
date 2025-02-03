@@ -38,11 +38,14 @@ __used __section("__versions") = {
 	{ 0xbdfb6dbb, "__fentry__" },
 	{ 0x122c3a7e, "_printk" },
 	{ 0x15ba50a6, "jiffies" },
+	{ 0x4f4ab2c1, "proc_create" },
 	{ 0x5b8239ca, "__x86_return_thunk" },
+	{ 0xea124bd1, "gcd" },
+	{ 0x3addb2e7, "remove_proc_entry" },
 	{ 0x6ad2b3e, "module_layout" },
 };
 
 MODULE_INFO(depends, "");
 
 
-MODULE_INFO(srcversion, "B52EE735AF44F343A9D2535");
+MODULE_INFO(srcversion, "DA6752F6557D2E1CC7E989B");

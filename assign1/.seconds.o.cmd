@@ -1029,6 +1029,8 @@ deps_/home/wilson/Desktop/3SH3/OS_Coursework/assign1/seconds.o := \
     $(wildcard include/config/MODULES_USE_ELF_REL) \
     $(wildcard include/config/MODULES_USE_ELF_RELA) \
   include/linux/gcd.h \
+  include/linux/proc_fs.h \
+    $(wildcard include/config/PROC_PID_ARCH_STATUS) \
 
 /home/wilson/Desktop/3SH3/OS_Coursework/assign1/seconds.o: $(deps_/home/wilson/Desktop/3SH3/OS_Coursework/assign1/seconds.o)
 
