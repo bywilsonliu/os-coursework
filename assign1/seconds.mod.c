@@ -42,10 +42,14 @@ __used __section("__versions") = {
 	{ 0x5b8239ca, "__x86_return_thunk" },
 	{ 0xea124bd1, "gcd" },
 	{ 0x3addb2e7, "remove_proc_entry" },
+	{ 0x3c3ff9fd, "sprintf" },
+	{ 0x88db9f48, "__check_object_size" },
+	{ 0x6b10bee1, "_copy_to_user" },
+	{ 0xf0fdf6cb, "__stack_chk_fail" },
 	{ 0x6ad2b3e, "module_layout" },
 };
 
 MODULE_INFO(depends, "");
 
 
-MODULE_INFO(srcversion, "DA6752F6557D2E1CC7E989B");
+MODULE_INFO(srcversion, "689E1D129783189FD1236E2");
