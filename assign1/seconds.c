@@ -13,9 +13,9 @@ int simple_init(void)
     printk(KERN_INFO "Loading Module\n");
 
     printk(KERN_INFO "jiffies = %lu\n",jiffies);
-	printk(KERN_INFO "HZ = %d\n",HZ);
-	
-	my_jiffies = jiffies;
+    printk(KERN_INFO "HZ = %d\n",HZ);
+    
+    my_jiffies = jiffies;
     my_HZ = HZ;
 
     return 0;
@@ -23,7 +23,7 @@ int simple_init(void)
 
 
 // Write a function that reports when cat command is called.
-
+/*
 {
 
     printk(KERN_INFO "jiffies = %lu\n",jiffies);
@@ -32,7 +32,7 @@ int simple_init(void)
     // Note: the above is reported as an integer number of seconds, as printk cannot handle float
 
 }
-
+*/
 
 
 /* This function is called when the module is removed. */

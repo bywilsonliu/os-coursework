@@ -1,0 +1,1 @@
+savedcmd_/home/wilson/Desktop/3SH3/OS_Coursework/assign1/seconds.ko := ld -r -m elf_x86_64 -z noexecstack --build-id=sha1  -T scripts/module.lds -o /home/wilson/Desktop/3SH3/OS_Coursework/assign1/seconds.ko /home/wilson/Desktop/3SH3/OS_Coursework/assign1/seconds.o /home/wilson/Desktop/3SH3/OS_Coursework/assign1/seconds.mod.o
