@@ -40,7 +40,6 @@ __used __section("__versions") = {
 	{ 0x15ba50a6, "jiffies" },
 	{ 0x4f4ab2c1, "proc_create" },
 	{ 0x5b8239ca, "__x86_return_thunk" },
-	{ 0xea124bd1, "gcd" },
 	{ 0x3addb2e7, "remove_proc_entry" },
 	{ 0x3c3ff9fd, "sprintf" },
 	{ 0x88db9f48, "__check_object_size" },
@@ -52,4 +51,4 @@ __used __section("__versions") = {
 MODULE_INFO(depends, "");
 
 
-MODULE_INFO(srcversion, "689E1D129783189FD1236E2");
+MODULE_INFO(srcversion, "D6724E6FB4DA3F69C2522D5");
