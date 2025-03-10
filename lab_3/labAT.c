@@ -21,12 +21,13 @@ int main(){
     while(fgets(buff, BUFFER_SIZE, fptr) != NULL){
         // printf("Virtual address is %s :", buff);
         int buff_1 = atoi(buff);
-        u_int32_t buff_2 = (u_int32_t)buff_1;
-        printf("Logical address is %u: ", buff_2);
-        printf("Page# = %u & ", buff_2 >> 12);
-        printf("Offset = %u. \n", buff_2 & OFFSET_MASK);
-        // printf("Physical address is ")
-        
+        u_int32_t logical_address = (u_int32_t)buff_1;
+        printf("Logical address is %u: ", logical_address);
+        u_int32_t page_number = logical_address >> OFFSET_BITS;
+        printf("Page# = %u & ", page_number);
+        u_int32_t offset = logical_address & OFFSET_MASK;
+        printf("Offset = %u. ", offset);
+        printf("Physical address is %u\n", (page_table[page_number] << OFFSET_BITS) | (logical_address & OFFSET_MASK));        
     }
 
     fclose(fptr);
