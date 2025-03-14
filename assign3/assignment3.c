@@ -1,11 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/mman.h>
+#include <string.h>
+#include <fcntl.h>
 
 #define BUFFER_SIZE 10 // 11 for fgets?
-
 #define OFFSET_BITS 8
 #define OFFSET_MASK 0x00FF
 #define PAGES 8
+
+#define MEMORY_SIZE 65536
 
 // TEST THIS ALL INCREMENTALLY, ONE LINE AT A TIME - ONLY DOING THIS CUZ YOU HAVE NO WIFI ON PLANE
 
@@ -17,6 +21,12 @@ int main(){
 
     FILE *fptr = fopen("addresses.txt" , "r");
     char buff[BUFFER_SIZE];
+
+    int mmapfile_fd = open("BACKING_STORE.bin", O_RDONLY); 
+    signed char* mmapfptr = mmap(0, MEMORY_SIZE, PROT_READ, MAP_PRIVATE, mmapfile_fd, 0); 
+
+
+
     //CHECK  u_int16_t page_table[256] = {-1};
 
     while(fgets(buff, BUFFER_SIZE, fptr) != NULL){
@@ -28,9 +38,11 @@ int main(){
         printf("Page# = %u & ", page_number);
         u_int16_t offset = logical_address & OFFSET_MASK;
         printf("Offset = %u. \n", offset);
+        
         // printf("Physical address is %u\n", (page_table[page_number] << OFFSET_BITS) | (logical_address & OFFSET_MASK));        
     }
 
+    munmap(mmapfptr, MEMORY_SIZE);
     fclose(fptr);
     return 0;
 }
