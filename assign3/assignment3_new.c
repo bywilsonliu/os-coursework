@@ -15,10 +15,16 @@
 #define NUM_PAGES 256
 #define NUM_FRAMES 128
 
-// TEST THIS ALL INCREMENTALLY, ONE LINE AT A TIME - ONLY DOING THIS CUZ YOU HAVE NO WIFI ON PLANE
-
 
 // frames brought in order???
+
+struct PhysMem {
+    signed char arr[128*256]; //128 frames, each holding 256 bytes (signed char)
+    int front; //initialize to -1
+    int back; //initialize to -1
+};
+
+void pageFault(u_int16_t pageNum, struct PhysMem *phys, signed char* mmapfptr);
 
 int main(){
     printf("Hello world!\n");
@@ -31,11 +37,9 @@ int main(){
     int mmapfile_fd = open("BACKING_STORE.bin", O_RDONLY); 
     signed char* mmapfptr = mmap(0, MEMORY_SIZE, PROT_READ, MAP_PRIVATE, mmapfile_fd, 0); 
 
-    /*
     // Physical memory setup
-    signed char phys_mem[NUM_FRAMES][FRAME_SIZE] = {69};
-    // Question: How to implement physical memory (32768 bits) - double array?
-    */
+    struct PhysMem phys = {{0}, -1, -1};
+
 
     u_int16_t page_table[256] = { [0 ... 255] = 999}; // Frame numbers can be between 0 and 127, or -1 -> therefore (signed) int_8_t
     // But for integration with below loop, make it u_int16_t and "not in memory number" 999 instead of -1
@@ -54,7 +58,15 @@ int main(){
         // CHECK PAGE TABLE // valid/invalid bit?
         if (page_table[page_number] == 999){ // page fault occurs
             printf("Page fault occurs\n");
+            pageFault(page_number, &phys, mmapfptr);
+            //signed char* test = phys->arr + 20;
+            printf("%d, %d, %d", *(phys.arr + 20), *(phys.arr + 758), *(phys.arr + 947));
         }
+        else printf("No page fault\n");
+
+        
+
+
 
 
 
@@ -79,6 +91,22 @@ int main(){
     return 0;
 }
 
+void pageFault(u_int16_t pageNum, struct PhysMem *phys, signed char* mmapfptr) {
+    if (phys->back == -1) { // Counter logic
+        phys->front = 0;
+        phys->back = 0;
+    } else if ((phys->front == phys->back + 1) || (phys->front == 0 && phys->back == 127)) { // FIFO replacement policy?
+        phys->back = phys->front;
+        if(++phys->front == 128) phys->front = 0;
+    } else {
+        ++phys->back;
+    }
+    memcpy(phys->arr + PAGE_SIZE * phys->back, mmapfptr + PAGE_SIZE * pageNum, PAGE_SIZE);
+    //memcpy(phys->arr + PAGE_SIZE * phys->back, mmapfptr + PAGE_SIZE * pageNum, PAGE_SIZE);
+
+}
+
+
 // There should be (a maximum of?) 2^8 entries in the (single-level) page table.
 // This program has (in its logical address space) 256 = 2^8 pages.
 // Now given a logical address, you're TRYING TO LOOK UP the value in that physical address (requires address translation from you).
@@ -86,8 +114,5 @@ int main(){
 // This requires pure demand paging, so if the page in which that logical address resides is not in memory,
 // you must bring it in memory through a page fault. 
 // (Unlike normally, where you just look up the frame in memory the page is (already) stored in, using the page table.)
-
-// mmapfptr to mmapfptr + 65536 (32768?) represents physical address space?
-// ^Not sure?
 
 // mmapfptr to mmapfptr + 65536 -> this space represents BACKING STORE, which is organized by PAGES!!
