@@ -29,6 +29,9 @@ u_int16_t pageFault(u_int16_t pageNum, struct PhysMem *phys, signed char* mmapfp
 int main(){
     printf("Hello world!\n");
 
+    // Trackers
+    int num_faults = 0;
+
     // Address requests setup
     FILE *fptr = fopen("addresses.txt" , "r");
     char buff[BUFFER_SIZE];
@@ -56,33 +59,29 @@ int main(){
 
         // CHECK TLB
         // CHECK PAGE TABLE // valid/invalid bit?
+
+        // Not in page table, page fault occurs
         if (page_table[page_number] == 999){ // Page fault occurs
-            printf("Page fault occurs\n");
+            printf("Page fault occurs. ");
+            num_faults += 1;
             int frame = pageFault(page_number, &phys, mmapfptr);
-            printf("Frame %d", frame);
+            printf("Frame %d ", frame);
             u_int16_t physical_address = ((frame << OFFSET_BITS) | offset);
-            printf("Physical address is %u\n", physical_address);        
-            //printf("Value=%d", *(phys.arr + ))
-            
-            //signed char* test = phys->arr + 20;
-            //printf("%d, %d, %d", *(phys.arr + 20), *(phys.arr + 758), *(phys.arr + 947));
+            printf("Physical address is %u .", physical_address);        
+            printf("Value=%d \n", *(phys.arr + physical_address));
+            page_table[page_number] = frame;
         }
-        else printf("No page fault\n");
-
         
-
-
-
-
-
-
-
-
+        // In page table   
+        else {
+            printf("No page fault. ");
+            int frame = page_table[page_number];
+            printf("Frame %d ", frame);
+            u_int16_t physical_address = ((frame << OFFSET_BITS) | offset);
+            printf("Physical address is %u .", physical_address);        
+            printf("Value=%d \n", *(phys.arr + physical_address));
+        }
         
-        // IF PAGE FAULT OCCURS (TLB miss and not in page table)
-
-        // memcpy(&phys_mem + , mmapfptr + page_number*256, 256); //At least starting with frame 0
-        // printf("Physical address is %u\n", (page_table[page_number] << OFFSET_BITS) | (logical_address & OFFSET_MASK));        
     }
 
     /* memcpy(&phys_mem, mmapfptr + 66*256, 256); //At least starting with frame 0
@@ -90,6 +89,8 @@ int main(){
     printf("Test value is: %hhn\n", *(phys_mem + 20));
     // ^Worked before this line? Not printing properly (Or at least before this commit?)
     */
+
+    printf("Page_faults = %d \n", num_faults);
 
     munmap(mmapfptr, MEMORY_SIZE);
     fclose(fptr);
