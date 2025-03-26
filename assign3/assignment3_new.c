@@ -24,7 +24,7 @@ struct PhysMem {
     int back; //initialize to -1
 };
 
-void pageFault(u_int16_t pageNum, struct PhysMem *phys, signed char* mmapfptr);
+u_int16_t pageFault(u_int16_t pageNum, struct PhysMem *phys, signed char* mmapfptr);
 
 int main(){
     printf("Hello world!\n");
@@ -56,11 +56,16 @@ int main(){
 
         // CHECK TLB
         // CHECK PAGE TABLE // valid/invalid bit?
-        if (page_table[page_number] == 999){ // page fault occurs
+        if (page_table[page_number] == 999){ // Page fault occurs
             printf("Page fault occurs\n");
-            pageFault(page_number, &phys, mmapfptr);
+            int frame = pageFault(page_number, &phys, mmapfptr);
+            printf("Frame %d", frame);
+            u_int16_t physical_address = ((frame << OFFSET_BITS) | offset);
+            printf("Physical address is %u\n", physical_address);        
+            //printf("Value=%d", *(phys.arr + ))
+            
             //signed char* test = phys->arr + 20;
-            printf("%d, %d, %d", *(phys.arr + 20), *(phys.arr + 758), *(phys.arr + 947));
+            //printf("%d, %d, %d", *(phys.arr + 20), *(phys.arr + 758), *(phys.arr + 947));
         }
         else printf("No page fault\n");
 
@@ -91,7 +96,7 @@ int main(){
     return 0;
 }
 
-void pageFault(u_int16_t pageNum, struct PhysMem *phys, signed char* mmapfptr) {
+u_int16_t pageFault(u_int16_t pageNum, struct PhysMem *phys, signed char* mmapfptr) {
     if (phys->back == -1) { // Counter logic
         phys->front = 0;
         phys->back = 0;
@@ -102,8 +107,8 @@ void pageFault(u_int16_t pageNum, struct PhysMem *phys, signed char* mmapfptr) {
         ++phys->back;
     }
     memcpy(phys->arr + PAGE_SIZE * phys->back, mmapfptr + PAGE_SIZE * pageNum, PAGE_SIZE);
-    //memcpy(phys->arr + PAGE_SIZE * phys->back, mmapfptr + PAGE_SIZE * pageNum, PAGE_SIZE);
-
+    
+    return (u_int16_t)phys->back;
 }
 
 
