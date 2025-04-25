@@ -1,2 +1,2 @@
-# OS_Coursework
-SFWRENG 3SH3
+# Operating Systems Coursework
+For SFWRENG 3SH3 at McMaster University.
